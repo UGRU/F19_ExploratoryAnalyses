@@ -44,10 +44,10 @@ theme_set(theme_light())
 df_eda = df_eda %>% as.tibble %>% janitor::clean_names()
 
 # Data Description
-df_eda %>% skim()
+df_eda %>% skimr::skim()
 
 # Data validity - missing values at the data set level
-df_eda %>% na.exclude() %>% skim()
+df_eda %>% na.exclude() %>% skimr::skim()
 
 df_eda %>% .[!complete.cases(.), ]
 
@@ -63,10 +63,10 @@ df_eda %>% GGally::ggpairs()
 # Multivariate outliers = minimum covariance determinant, multivariate extension of normal distibution outliers
 # https://willhipson.netlify.com/post/outliers/outliers/
 # works only with quantitative data!
-# df_edaQ = df_eda %>% fastDummies::dummy_cols(remove_first_dummy = T) %>% select_if(is.numeric)
+# df_edaQ = df_eda %>% fastDummies::dummy_cols(remove_first_dummy = T) 
 
-dfMVoutlier <- df_eda %>% MASS::cov.mcd(., quantile.used = nrow(.)*.75)
-dfMVoutlier <- df_eda %>%  mahalanobis(., dfMVoutlier$center, dfMVoutlier$cov)
+dfMVoutlier <- df_eda %>% select_if(is.numeric) %>% MASS::cov.mcd(., quantile.used = nrow(.)*.75)
+dfMVoutlier <- df_eda %>% select_if(is.numeric) %>%  mahalanobis(., dfMVoutlier$center, dfMVoutlier$cov)
 vcMVoutlier = which(dfMVoutlier > (qchisq(p = 1 - 0.001, df = ncol(iris[,1:4]))))
 # adjust 0.001 up/down to make the detection more/less sensitive
 
@@ -74,6 +74,6 @@ df_eda[-vcMVoutlier, ] # w/o multivariate outliers
 
 df_eda[vcMVoutlier, ] # only multivariate outliers
 
-df_eda %>% prcomp(center = T, scale. = T) %>% 
+df_eda %>% select_if(is.numeric) %>% prcomp(center = T, scale. = T) %>% 
   ggbiplot::ggbiplot(circle = T)
 
