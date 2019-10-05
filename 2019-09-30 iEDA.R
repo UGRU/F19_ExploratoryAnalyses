@@ -36,7 +36,7 @@ theme_set(theme_light())
 # install.packages("devtools")
 # devtools::install_github("vqv/ggbiplot")
 
-# I did not load them at the start, but called all functions with ::
+# I did not load all packages at the start, but called all functions with ::
 # that way, you can just use the one function from the package w/o loading the whole package
 
 # Cleaning up column names
