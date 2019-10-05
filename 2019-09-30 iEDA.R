@@ -33,15 +33,15 @@ theme_set(theme_light())
 # install.packages("skimr")
 # install.packages("GGally")
 # install.packages("MASS")
-# library(devtools)
-# install_github("vqv/ggbiplot")
+# install.packages("devtools")
+# devtools::install_github("vqv/ggbiplot")
 
 # I did not load them at the start, but called all functions with ::
-# if you don't need a step, you then don't prolong startup
+# that way, you can just use the one function from the package w/o loading the whole package
 
 # Cleaning up column names
 # Often columns names imported from spreadsheets don't convert well in R
-df_eda = df_eda %>% as.tibble %>% janitor::clean_names()
+df_eda = df_eda %>% as_tibble %>% janitor::clean_names()
 
 # Data Description
 df_eda %>% skimr::skim()
@@ -57,7 +57,12 @@ df_eda %>% dataMaid::check()
 
 df_eda %>% dataMaid::visualize()
 
+# The line below is necessary bc dataMaid outputs graphics to a new window
+dev.off()
+
 # Bivariate data validity
+# If categorical variables have lots of categories, this will throw error
+# To avoid this, increase cardinality_threshold = 15 parameter
 df_eda %>% GGally::ggpairs()
 
 # Multivariate outliers = minimum covariance determinant, multivariate extension of normal distibution outliers
@@ -65,8 +70,8 @@ df_eda %>% GGally::ggpairs()
 # works only with quantitative data!
 # df_edaQ = df_eda %>% fastDummies::dummy_cols(remove_first_dummy = T) 
 
-dfMVoutlier <- df_eda %>% select_if(is.numeric) %>% MASS::cov.mcd(., quantile.used = nrow(.)*.75)
-dfMVoutlier <- df_eda %>% select_if(is.numeric) %>%  mahalanobis(., dfMVoutlier$center, dfMVoutlier$cov)
+dfMVoutlier = df_eda %>% select_if(is.numeric) %>% MASS::cov.mcd(., quantile.used = nrow(.)*.75)
+dfMVoutlier = df_eda %>% select_if(is.numeric) %>%  mahalanobis(., dfMVoutlier$center, dfMVoutlier$cov)
 vcMVoutlier = which(dfMVoutlier > (qchisq(p = 1 - 0.001, df = ncol(iris[,1:4]))))
 # adjust 0.001 up/down to make the detection more/less sensitive
 
@@ -74,6 +79,7 @@ df_eda[-vcMVoutlier, ] # w/o multivariate outliers
 
 df_eda[vcMVoutlier, ] # only multivariate outliers
 
+# one way to plot the multivariate outliers, correlation biplot
 df_eda %>% select_if(is.numeric) %>% prcomp(center = T, scale. = T) %>% 
   ggbiplot::ggbiplot(circle = T)
 
