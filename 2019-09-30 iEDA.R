@@ -26,6 +26,7 @@ theme_set(theme_light())
 
 ## Interactive EDA - Use your brain! -----
 # based on https://arxiv.org/abs/1904.02101#
+# cautionary tale: https://www.vox.com/future-perfect/2019/10/3/20895240/study-typo-religion-children-generosity-retraction
 
 # install these packages if you don't have them yet
 # install.packages("dataMaid")
