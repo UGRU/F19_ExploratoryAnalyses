@@ -73,7 +73,7 @@ df_eda %>% GGally::ggpairs()
 
 dfMVoutlier = df_eda %>% select_if(is.numeric) %>% MASS::cov.mcd(., quantile.used = nrow(.)*.75)
 dfMVoutlier = df_eda %>% select_if(is.numeric) %>%  mahalanobis(., dfMVoutlier$center, dfMVoutlier$cov)
-vcMVoutlier = which(dfMVoutlier > (qchisq(p = 1 - 0.001, df = ncol(iris[,1:4]))))
+vcMVoutlier = which(dfMVoutlier > (qchisq(p = 1 - 0.001, df = ncol(select_if(df_eda, is.numeric)))))
 # adjust 0.001 up/down to make the detection more/less sensitive
 
 df_eda[-vcMVoutlier, ] # w/o multivariate outliers
@@ -82,5 +82,6 @@ df_eda[vcMVoutlier, ] # only multivariate outliers
 
 # one way to plot the multivariate outliers, correlation biplot
 df_eda %>% select_if(is.numeric) %>% prcomp(center = T, scale. = T) %>% 
-  ggbiplot::ggbiplot(circle = T)
+  ggbiplot::ggbiplot(circle = T, groups = rownames(df_eda) %in% as.character(vcMVoutlier)) + 
+  scale_colour_viridis(discrete = T)
 
