@@ -21,6 +21,8 @@ snippet ieda
 	# Bivariate data validity
 
 	${1:data} %>% GGally::ggpairs() # increase cardinality_threshold = 15 parameter
+	
+	${1:data} %>% correlation::correlation(include_factors = T, method = "auto")
 
 	# Multivariate outliers 
 	# ${1:data}Q = ${1:data} %>% fastDummies::dummy_cols(remove_first_dummy = T) 

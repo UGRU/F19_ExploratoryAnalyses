@@ -36,6 +36,7 @@ theme_set(theme_light())
 # install.packages("MASS")
 # install.packages("devtools")
 # devtools::install_github("vqv/ggbiplot")
+# devtools::install_github("easystats/correlation")
 
 # I did not load all packages at the start, but called all functions with ::
 # that way, you can just use the one function from the package w/o loading the whole package
@@ -67,6 +68,8 @@ dev.off()
 # If categorical variables have lots of categories, this will throw error message
 # To avoid this, increase cardinality_threshold = 15 parameter
 df_eda %>% GGally::ggpairs()
+
+df_eda %>% correlation::correlation(include_factors = T, method = "auto")
 
 # Multivariate outliers = minimum covariance determinant, multivariate extension of normal distibution outliers
 # https://willhipson.netlify.com/post/outliers/outliers/
