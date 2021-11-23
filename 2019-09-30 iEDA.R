@@ -22,7 +22,7 @@ theme_set(theme_light())
 # Solutions/results/interpretations (#==> XXX)
 # Reference to manuscript pieces, figures, results, tables, ... # (*_*)
 # TODO items #TODO
-# names for data frames (dfName), for lists (lsName), for vectors (vcName) (Thanks Jacqueline May)
+# names for data frames (df_name), for lists (ls_name), for vectors (vc_name) (Thanks Jacqueline May)
 
 ## Interactive EDA - Use your brain! -----
 # based on https://arxiv.org/abs/1904.02101#
@@ -38,6 +38,7 @@ theme_set(theme_light())
 # devtools::install_github("vqv/ggbiplot")
 # devtools::install_github("easystats/correlation")
 # remotes::install_github("allisonhorst/palmerpenguins")
+# install.packages("ppsr")
 
 # I did not load all packages at the start, but called all functions with ::
 # that way, you can just use the one function from the package w/o loading the whole package
@@ -68,6 +69,17 @@ df_eda %>% dataMaid::visualize()
 
 # The line below is necessary because dataMaid outputs graphics to a new window
 dev.off()
+
+# Predictive Power Score 
+# See here for an introduction: https://rviews.rstudio.com/2021/04/15/an-alternative-to-the-correlation-coefficient-that-works-for-numeric-and-categorical-variables/
+# And this is the package used: https://paulvanderlaken.com/2020/05/04/predictive-power-score-finding-patterns-dataset/
+
+df_eda %>% 
+  # warning, might take some time!
+  ppsr::score_df()
+
+df_eda %>% 
+  ppsr::visualize_pps()
 
 # Bivariate data validity
 # If categorical variables have lots of categories, this will throw error message

@@ -17,6 +17,10 @@ snippet ieda
 	${1:data} %>% dataMaid::visualize()
 
 	dev.off()
+	
+	# Predictive Power Score
+	${1:data} %>% ppsr::score_df()
+	${1:data} %>% ppsr::visualize_pps()
 
 	# Bivariate data validity
 
