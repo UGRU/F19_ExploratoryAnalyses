@@ -9,24 +9,23 @@ snippet ieda
 	# Data validity - missing values at the data set level
 	${1:data} %>% na.exclude() %>% skimr::skim()
 
-	${1:data} %>% .[!complete.cases(.), ]
+	${1:data} %>% filter(!complete.cases(.)) %>% View()
 
 	# Univariate data validity - 0s, outliers, invalid values
+	${1:data} %>% dataMaid::visualize()
+	dev.off()
+	
 	${1:data} %>% dataMaid::check()
 
-	${1:data} %>% dataMaid::visualize()
-
-	dev.off()
+	# Bivariate data validity
+	
+	${1:data} %>% GGally::ggpairs() # increase cardinality_threshold = 15 parameter
+	
+	${1:data} %>% correlation::correlation(include_factors = T, method = "auto")
 	
 	# Predictive Power Score
 	${1:data} %>% ppsr::score_df()
 	${1:data} %>% ppsr::visualize_pps()
-
-	# Bivariate data validity
-
-	${1:data} %>% GGally::ggpairs() # increase cardinality_threshold = 15 parameter
-	
-	${1:data} %>% correlation::correlation(include_factors = T, method = "auto")
 
 	# Multivariate outliers 
 	# ${1:data}Q = ${1:data} %>% fastDummies::dummy_cols(remove_first_dummy = T) 

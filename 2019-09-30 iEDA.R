@@ -1,11 +1,11 @@
-##############################
+##****************************
 ## Interactive Exploratory Data Analysis
 ##
 ## Karl Cottenie
 ##
 ## 2019-09-30
 ##
-##############################
+##****************************
 
 library(tidyverse)
 library(viridis)
@@ -59,16 +59,15 @@ df_eda %>% skimr::skim()
 # Data validity - missing values at the data set level
 df_eda %>% na.exclude() %>% skimr::skim()
 
-df_eda %>% .[!complete.cases(.), ]
+df_eda %>% filter(!complete.cases(.)) %>% View()
 
 # Univariate data validity - 0s, outliers, invalid values
 # outliers = Tukey boxplot outliers
-df_eda %>% dataMaid::check()
-
 df_eda %>% dataMaid::visualize()
-
 # The line below is necessary because dataMaid outputs graphics to a new window
 dev.off()
+
+df_eda %>% dataMaid::check()
 
 # Predictive Power Score 
 # See here for an introduction: https://rviews.rstudio.com/2021/04/15/an-alternative-to-the-correlation-coefficient-that-works-for-numeric-and-categorical-variables/

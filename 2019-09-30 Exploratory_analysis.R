@@ -1,11 +1,11 @@
-##############################
+##*****************************
 ## Interactive Exploratory Data Analysis
 ##
 ## Karl Cottenie
 ##
 ## 2019-09-30
 ##
-##############################
+##*****************************
 
 library(tidyverse)
 library(viridis)
@@ -49,13 +49,14 @@ df_eda %>% skim()
 # Data validity - missing values at the data set level
 df_eda %>% na.exclude() %>% skim()
 
-df_eda %>% .[!complete.cases(.), ]
+df_eda %>% filter(!complete.cases(.)) %>% View()
 
 # Univariate data validity - 0s, outliers, invalid values
 # outliers = Tukey boxplot outliers
-df_eda %>% dataMaid::check()
-
 df_eda %>% dataMaid::visualize()
+dev.off()
+
+df_eda %>% dataMaid::check()
 
 # Bivariate data validity
 df_eda %>% GGally::ggpairs()
